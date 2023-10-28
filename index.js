@@ -25,17 +25,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set("view engine", "hbs");
 
 
-app.get("/",(req,res)=>{
-    res.render("home");
-})
+// app.get("/",(req,res)=>{
+//     res.render("home");
+// })
 
-app.get("/imgresizer",(req,res)=>{
+app.get("/",(req,res)=>{
     res.render("imgresizer");
 })
 
 // Configure Multer to use memory storage
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = new multer ();
 
 app.post('/imgresizer', upload.single('image'), (req, res) => {
   //body-parser le body tag vitra ko elements lai direct access garn milx, likr: req.body.element-Name
@@ -46,6 +45,7 @@ app.post('/imgresizer', upload.single('image'), (req, res) => {
 
   // req.file contains the uploaded image as a buffer
   const imageBuffer = req.file.buffer;
+  console.log(imageBuffer);
   sharp(imageBuffer)
     .resize(width, height)
     .png()
